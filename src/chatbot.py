@@ -1,6 +1,5 @@
 from langchain.tools import tool
 from langchain_openai import AzureChatOpenAI
-from langchain_tavily import TavilySearch
 from pinecone import Pinecone, ServerlessSpec, CloudProvider, AwsRegion, VectorType
 from openai import OpenAI
 import os
@@ -9,7 +8,6 @@ import json
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 import logging
-from tts_service import tts_service
 from langdetect import detect, LangDetectException
 
 # Configure logging
@@ -59,9 +57,6 @@ class ITHelpDeskBot:
                 vector_type=VectorType.DENSE
             )
             self.index = self.pc.Index(host=index_config.host)
-
-        # Initialize Tavily Search for web search
-        self.search_tool = TavilySearch(api_key=os.getenv("TAVILY_API_KEY"))
 
         # Initialize knowledge base
         self._initialize_knowledge_base()
@@ -193,7 +188,7 @@ class ITHelpDeskBot:
             logger.warning(f"Lỗi khi phát hiện ngôn ngữ: {e}")
             return 'vi'
     
-    def get_response(self, user_input: str, enable_tts: bool = False) -> Dict[str, Any]:
+    def get_response(self, user_input: str) -> Dict[str, Any]:
         """Generate a response based on user input with optional TTS."""
         try:
             # Add user message to conversation history
@@ -264,17 +259,6 @@ class ITHelpDeskBot:
         
         # Generate TTS audio if requested
         audio_url = None
-        # if enable_tts and response_content:
-        #     try:
-        #         detected_lang = self._detect_language(response_content)
-        #         logger.info(f"Ngôn ngữ được phát hiện cho TTS: {detected_lang}")
-        #         audio_path = tts_service.text_to_speech(response_content, lang=detected_lang, speed=2)
-        #         if audio_path:
-        #             audio_url = tts_service.get_audio_url(audio_path)
-        #             # Cleanup old audio files
-        #             tts_service.cleanup_old_audio()
-        #     except Exception as e:
-        #         logger.error(f"Error generating TTS: {str(e)}")
         
         return {
             "response": response_content,

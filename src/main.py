@@ -21,44 +21,15 @@ def home():
 @app.route('/chat', methods=['POST'])
 def chat():
     user_message = request.json.get('message')
-    enable_tts = request.json.get('enable_tts', False)
     
     if not user_message:
         return jsonify({"error": "No have message"}), 400
 
     try:
-        bot_response = chatbot.get_response(user_message, enable_tts=enable_tts)
+        bot_response = chatbot.get_response(user_message)
         return jsonify(bot_response)
     except Exception as e:
         print(f"Error when receiver response from chatbot: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
-
-@app.route('/tts', methods=['POST'])
-def text_to_speech():
-    """API endpoint để chuyển đổi text thành speech"""
-    data = request.json
-    text = data.get('text')
-    speed = data.get('speed', 1.0)
-    
-    if not text:
-        return jsonify({"error": "No text provided"}), 400
-    
-    try:
-        from tts_service import tts_service
-        audio_path = tts_service.text_to_speech(text, speed=speed)
-        
-        if audio_path:
-            audio_url = tts_service.get_audio_url(audio_path)
-            return jsonify({
-                "success": True,
-                "audio_url": audio_url,
-                "message": "Audio generated successfully"
-            })
-        else:
-            return jsonify({"error": "Failed to generate audio"}), 500
-            
-    except Exception as e:
-        print(f"Error generating TTS: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
 
 # if __name__ == "__main__":
