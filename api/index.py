@@ -5,14 +5,14 @@ from chatbot import ITHelpDeskBot
 from utils import load_env_variables
 
 app = Flask(__name__)
-# CORS(app)
+CORS(app)
 
 try:
     load_env_variables()
     chatbot = ITHelpDeskBot()
 except EnvironmentError as e:
     print(f"Error: {e}")
-    exit(1)
+    chatbot = None
 
 @app.route('/')
 def home():
