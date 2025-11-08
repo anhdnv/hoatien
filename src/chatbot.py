@@ -264,17 +264,17 @@ class ITHelpDeskBot:
         
         # Generate TTS audio if requested
         audio_url = None
-        # if enable_tts and response_content:
-        #     try:
-        #         detected_lang = self._detect_language(response_content)
-        #         logger.info(f"Ngôn ngữ được phát hiện cho TTS: {detected_lang}")
-        #         audio_path = tts_service.text_to_speech(response_content, lang=detected_lang, speed=2)
-        #         if audio_path:
-        #             audio_url = tts_service.get_audio_url(audio_path)
-        #             # Cleanup old audio files
-        #             tts_service.cleanup_old_audio()
-        #     except Exception as e:
-        #         logger.error(f"Error generating TTS: {str(e)}")
+        if enable_tts and response_content:
+            try:
+                detected_lang = self._detect_language(response_content)
+                logger.info(f"Ngôn ngữ được phát hiện cho TTS: {detected_lang}")
+                audio_path = tts_service.text_to_speech(response_content, lang=detected_lang, speed=2)
+                if audio_path:
+                    audio_url = tts_service.get_audio_url(audio_path)
+                    # Cleanup old audio files
+                    tts_service.cleanup_old_audio()
+            except Exception as e:
+                logger.error(f"Error generating TTS: {str(e)}")
         
         return {
             "response": response_content,
