@@ -42,8 +42,7 @@ einops==0.8.1
 einx==0.3.0
 ema-pytorch==0.7.7
 encodec==0.1.1
-# Editable install with no version control (f5-tts==1.0.1)
--e /Users/anhdnv/Projects/AI Elevate/Elevate AI_DN06_HoaTien_Workshop 03/F5-TTS-Vietnamese
+f5-tts==1.0.1
 fastapi==0.119.0
 ffmpy==0.6.3
 filelock==3.20.0
