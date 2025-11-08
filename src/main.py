@@ -12,7 +12,7 @@ try:
     chatbot = ITHelpDeskBot()
 except EnvironmentError as e:
     print(f"Error: {e}")
-    exit(1)
+    chatbot = None
 
 @app.route('/')
 def home():
@@ -61,6 +61,6 @@ def text_to_speech():
         print(f"Error generating TTS: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
 
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+# if __name__ == "__main__":
+#     port = int(os.environ.get('PORT', 5000))
+#     app.run(host='0.0.0.0', port=port, debug=False)
